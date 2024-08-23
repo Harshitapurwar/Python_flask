@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        header img {
+            max-width: 50px;
+            height: auto;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+
+        .avatar {
+            border-radius: 50%;
+            margin-right: 20px;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 2px solid #dee2e6;
+        }
+
+        .profile-details {
+            max-width: 600px;
+        }
+
+        .profile-details h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #343a40;
+        }
+
+        .profile-details p {
+            margin: 5px 0;
+            color: #495057;
+        }
+
+        .profile-details strong {
+            color: #212529;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo">
+        <h1>My Profile</h1>
+    </header>
+    <main>
+        <div class="profile-container">
+            {% if profile and profile.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="avatar">
+            {% else %}
+                <img src="{{ url_for('static', filename='camera.png') }}" alt="Avatar" class="avatar">
+            {% endif %}
+            <div class="profile-details">
+                <h2>Profile Information</h2>
+                {% if profile %}
+                    <p><strong>First Name:</strong> {{ profile.fname }}</p>
+                    <p><strong>Last Name:</strong> {{ profile.lname }}</p>
+                    <p><strong>Phone:</strong> {{ profile.phone }}</p>
+                    <p><strong>Street:</strong> {{ profile.street }}</p>
+                    <p><strong>City:</strong> {{ profile.city }}</p>
+                    <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
+                    <p><strong>State:</strong> {{ profile.state }}</p>
+                    <p><strong>Country:</strong> {{ profile.country }}</p>
+                {% else %}
+                    <p>No profile information available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

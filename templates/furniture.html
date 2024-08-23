@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="portal.html" rel="import" />
+    <title>Furniture</title>
+    <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: white;
+            padding-top: 20px;
+        }
+        
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar .logo img {
+            width: 80px;
+        }
+        
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar ul li {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #888;
+            transition: background-color 0.3s;
+        }
+        
+        .sidebar ul li:hover {
+            background-color: #333;
+        }
+        
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+            transition: box-shadow 0.3s;
+            background-color: #fff;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card img {
+            /* max-width: 100%; */
+            width: 300px;
+            height: 300px;
+            border-radius: 5px;
+        }
+        
+        .card h2 {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        .card p {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .card a {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        
+        .card a:hover {
+            background-color: #0056b3;
+        }
+        
+        .card a i {
+            margin-right: 5px;
+        }
+        
+        @media screen and (max-width: 600px) {
+            .sidebar {
+                width: 100%;
+            }
+            
+            .content {
+                margin-left: 0;
+            }
+            
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- <ui:include src="portal.html" /> -->
+    <div class="content">
+        <div class="card">
+            <img src="../static/furniture-repair.avif" alt="Furniture 1">
+            <h2>Furniture Shop 1</h2>
+            <p>Address: 123 Main St</p>
+            <p>Phone: 555-1234</p>
+            <p>Price Range: $200 - $400</p>
+            <p>Rating: 4.5</p>
+            <a href="tel:5551234"><i class="fas fa-phone"></i> Call Now</a>
+            <a href="https://wa.me/1234567890"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+        <div class="card">
+            <img src="../static/furniture-repair.avif" alt="Furniture 2">
+            <h2>Furniture Shop 2</h2>
+            <p>Address: 456 Elm St</p>
+            <p>Phone: 555-5678</p>
+            <p>Price Range: $300 - $500</p>
+            <p>Rating: 4.2</p>
+            <a href="tel:5555678"><i class="fas fa-phone"></i> Call Now</a>
+            <a href="https://wa.me/1234567890"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+        <!-- Add more cards here -->
+    </div>
+   
+
+</body>
+</html>

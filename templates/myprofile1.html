@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+    <style>
+        .profile-container {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .avatar {
+            border-radius: 50%;
+            margin-right: 20px;
+            width: 150px;
+            height: 150px;
+        }
+
+        .profile-details {
+            max-width: 600px;
+        }
+
+        .profile-details p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo">
+        <h1>My Profile</h1>
+    </header>
+    <main>
+        <div class="profile-container">
+            {% if profile and profile.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="avatar">
+            {% else %}
+                <img src="{{ url_for('static', filename='camera.png') }}" alt="Avatar" class="avatar">
+            {% endif %}
+            <div class="profile-details">
+                <h2>Profile Information</h2>
+                {% if profile %}
+                    <p><strong>First Name:</strong> {{ profile.fname }}</p>
+                    <p><strong>Last Name:</strong> {{ profile.lname }}</p>
+                    <p><strong>Phone:</strong> {{ profile.phone }}</p>
+                    <p><strong>Street:</strong> {{ profile.street }}</p>
+                    <p><strong>City:</strong> {{ profile.city }}</p>
+                    <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
+                    <p><strong>State:</strong> {{ profile.state }}</p>
+                    <p><strong>Country:</strong> {{ profile.country }}</p>
+                {% else %}
+                    <p>No profile information available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

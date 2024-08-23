@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat History</title>
+</head>
+<body>
+    <h1>Chat History</h1>
+    <div id="chatHistory">
+        <!-- Chat messages will be displayed here -->
+    </div>
+
+    <script>
+        // Fetch chat messages from server and display them
+        fetch('/get_chat_messages')
+            .then(response => response.json())
+            .then(data => {
+                var chatHistory = document.getElementById('chatHistory');
+                data.forEach(message => {
+                    var messageDiv = document.createElement('div');
+                    messageDiv.textContent = message.username + ': ' + message.message;
+                    chatHistory.appendChild(messageDiv);
+                });
+            })
+            .catch(error => console.error('Error fetching chat messages:', error));
+    </script>
+</body>
+</html>

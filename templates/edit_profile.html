@@ -1,0 +1,176 @@
+<!-- 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_profile.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="House Help Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Find services</a></li>
+                <li><a href="#">Assistance</a></li>
+                <li><a href="#" class="login-btn">Log in</a></li>
+            </ul>
+        </nav>
+        
+        <div class="avatar-container">
+            {% if profile and profile.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="avatar">
+            {% else %}
+                <img src="{{ url_for('static', filename='camera.png') }}" alt="Avatar" class="avatar">
+            {% endif %}
+            <div class="dropdown-content">
+                <a href="{{ url_for('myprofile') }}">View Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+                <a href="{{ url_for('landing') }}">Landing</a>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="left-panel">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="logo">
+            <h1>Edit Profile</h1>
+        </div>
+        <div class="right-panel">
+            <form action="{{ url_for('edit_profile') }}" method="post" enctype="multipart/form-data">
+                <div class="avatar-container">
+                    <div class="avatar-wrapper">
+                        {% if profile.avatar %}
+                            <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="avatar">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Avatar" class="avatar">
+                        {% endif %}
+                        <div class="avatar-icon">
+                            <img src="{{ url_for('static', filename='upload-icon.webp') }}" alt="Upload Icon">
+                        </div>
+                    </div>
+                    <input type="file" name="avatar" id="avatar-upload" class="avatar-upload" accept="image/*">
+                </div>
+                <label for="fname">First Name:</label>
+                <input type="text" name="fname" id="fname" value="{{ profile.fname }}" required><br>
+                <label for="lname">Last Name:</label>
+                <input type="text" name="lname" id="lname" value="{{ profile.lname }}" required><br>
+                <label for="phone">Phone:</label>
+                <input type="tel" name="phone" id="phone" value="{{ profile.phone }}"><br>
+                <label for="country">Country:</label>
+                <input type="text" name="country" id="country" value="{{ profile.country }}" required><br>
+                <label for="state">State:</label>
+                <input type="text" name="state" id="state" value="{{ profile.state }}" required><br>
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" value="{{ profile.city }}" required><br>
+                <label for="street">Street:</label>
+                <input type="text" name="street" id="street" value="{{ profile.street }}"><br>
+                <label for="postal_code">Postal Code:</label>
+                <input type="text" name="postal_code" id="postal_code" value="{{ profile.postal_code }}"><br>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.querySelector('.avatar-icon').addEventListener('click', function() {
+            document.querySelector('#avatar-upload').click();
+        });
+    </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_profile.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="House Help Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Find services</a></li>
+                <li><a href="#">Assistance</a></li>
+                <li><a href="#" class="login-btn">Log in</a></li>
+            </ul>
+        </nav>
+        
+        <div class="avatar-container">
+            {% if profile and profile.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="avatar">
+            {% else %}
+                <img src="{{ url_for('static', filename='camera.png') }}" alt="Avatar" class="avatar">
+            {% endif %}
+            <div class="dropdown-content">
+                <a href="{{ url_for('myprofile') }}">View Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+                <a href="{{ url_for('landing') }}">Landing</a>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="left-panel">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="logo">
+            <h1>Edit Profile</h1>
+        </div>
+        <div class="right-panel">
+            <form action="{{ url_for('edit_profile') }}" method="post" enctype="multipart/form-data">
+                <div class="avatar-container">
+                    <div class="avatar-wrapper">
+                        <img src="{% if profile.avatar %}{{ url_for('static', filename='uploads/' ~ profile.avatar) }}{% else %}{{ url_for('static', filename='logo.jpg') }}{% endif %}" alt="Avatar" class="avatar" id="avatar-preview">
+                        <div class="avatar-icon">
+                            <img src="{{ url_for('static', filename='upload-icon.webp') }}" alt="Upload Icon">
+                        </div>
+                    </div>
+                    <input type="file" name="avatar" id="avatar-upload" class="avatar-upload" accept="image/*">
+                </div>
+                <label for="fname">First Name:</label>
+                <input type="text" name="fname" id="fname" value="{{ profile.fname }}" required><br>
+                <label for="lname">Last Name:</label>
+                <input type="text" name="lname" id="lname" value="{{ profile.lname }}" required><br>
+                <label for="phone">Phone:</label>
+                <input type="tel" name="phone" id="phone" value="{{ profile.phone }}"><br>
+                <label for="country">Country:</label>
+                <input type="text" name="country" id="country" value="{{ profile.country }}" required><br>
+                <label for="state">State:</label>
+                <input type="text" name="state" id="state" value="{{ profile.state }}" required><br>
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" value="{{ profile.city }}" required><br>
+                <label for="street">Street:</label>
+                <input type="text" name="street" id="street" value="{{ profile.street }}"><br>
+                <label for="postal_code">Postal Code:</label>
+                <input type="text" name="postal_code" id="postal_code" value="{{ profile.postal_code }}"><br>
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.querySelector('.avatar-icon').addEventListener('click', function() {
+            document.querySelector('#avatar-upload').click();
+        });
+
+        document.querySelector('#avatar-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.querySelector('#avatar-preview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

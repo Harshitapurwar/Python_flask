@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Help</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+</head>
+<body>
+    
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="House Help Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Find services</a></li>
+                <li><a href="#">Assistance</a></li>
+                <li><a href="#" class="login-btn">Log in</a></li>
+            </ul>
+        </nav>
+        
+        <div class="avatar-container">
+            {% if profile and profile.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="avatar">
+            {% else %}
+                <img src="{{ url_for('static', filename='camera.png') }}" alt="Avatar" class="avatar">
+            {% endif %}
+            <div class="dropdown-content">
+                <a href="{{ url_for('myprofile') }}">View Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+                <a href="{{ url_for('landing') }}">Landing</a>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Discover top-rated service providers for your needs.</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for service">
+                <button>Enter</button>
+            </div>
+            <p>Book services with ease and convenience at competitive rates.</p>
+        </section>
+        
+        <section class="services">
+            <div class="service-category">
+                <ul class="nav-links">
+                    <li><a class="button-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a class="button-link" href="{{ url_for('worker_card', service_type='furniture') }}">Furniture</a></li>
+                    <li><a class="button-link" href="{{ url_for('worker_card', service_type='plumbing') }}">Plumbing</a></li>
+                    <li><a class="button-link" href="{{ url_for('worker_card', service_type='carpenters') }}">Carpenters</a></li>
+                    <li><a class="button-link" href="{{ url_for('worker_card', service_type='electrician') }}">Electrician</a></li>
+                    <li><a class="button-link" href="{{ url_for('worker_card', service_type='house_cleaner') }}">House Cleaner</a></li>
+                    <li><a class="button-link" href="{{ url_for('worker_card', service_type='housemaid') }}">Housemaid</a></li>
+                </ul>
+            </div>
+        </section>
+
+<div class="content">
+    <section class="city-services">
+        <h2>This week's Services in Your City</h2>
+        {% if workers_by_type %}
+            {% for service_type, workers in workers_by_type.items() %}
+                <div class="service-type-section">
+                    <h3>{{ service_type|capitalize }}</h3>
+                    <div class="service-row">
+                        {% for worker in workers %}
+                            <div class="worker-card">
+                                <img src="{{ url_for('static', filename='uploads/' ~ worker.avatar) }}" alt="Avatar" class="worker-avatar">
+                                <div class="worker-details">
+                                    <h2>{{ worker.fname }} {{ worker.lname }}</h2>
+                                    <p><strong>Phone:</strong> {{ worker.phone }}</p>
+                                    <p><strong>Street:</strong> {{ worker.street }}</p>
+                                    <p><strong>City:</strong> {{ worker.city }}</p>
+                                    <p><strong>Postal Code:</strong> {{ worker.postal_code }}</p>
+                                    <p><strong>State:</strong> {{ worker.state }}</p>
+                                    <p><strong>Country:</strong> {{ worker.country }}</p>
+                                    <p><strong>Service Type:</strong> {{ worker.service_type }}</p>
+                                    <div class="contact-links">
+                                        <a href="tel:{{ worker.phone }}" class="call-now"><i class="fas fa-phone"></i> Call Now</a>
+                                        <a href="https://wa.me/{{ worker.phone }}" class="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="more-button" href="{{ url_for('worker_card', service_type=service_type) }}">More {{ service_type|capitalize }} Services</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No workers found for your postal code.</p>
+        {% endif %}
+    </section>
+   
+</div>
+        
+        <section class="explore-services">
+            <h2>Services to explore</h2>
+            <div class="explore-list">
+                <div class="explore-card">
+                    <h3>Home Chef Service</h3>
+                    <p>214 bookings</p>
+                    <button>Book</button>
+                </div>
+                <div class="explore-card">
+                    <h3>Home Renovation Service</h3>
+                    <p>201 bookings</p>
+                    <button>Book</button>
+                </div>
+                <div class="explore-card">
+                    <h3>Entertainment Service</h3>
+                    <p>32 bookings</p>
+                    <button>Book</button>
+                </div>
+                <div class="explore-card">
+                    <h3>Interior Design Service</h3>
+                    <p>102 bookings</p>
+                    <button>Book</button>
+                </div>
+                <div class="explore-card">
+                    <h3>Home Decor Service</h3>
+                    <p>1,731 bookings</p>
+                    <button>Book</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <section class="connect">
+            <h3>Connect with us</h3>
+            <p>Email: househelp.support@gmail.com</p>
+            <div class="social-media">
+                <a href="#"><img src="facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="instagram.png" alt="Instagram"></a>
+                <a href="#"><img src="submit.png" alt="Submit"></a>
+            </div>
+        </section>
+        
+        <section class="info">
+            <div class="about-us">
+                <h3>About our</h3>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">How it works</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            <div class="connect-with-us">
+                <h3>Connect with us</h3>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Pinterest</a></li>
+                </ul>
+            </div>
+            <div class="for-service-providers">
+                <h3>For service providers</h3>
+                <ul>
+                    <li><a href="#">Partnership</a></li>
+                    <li><a href="#">Collaboration</a></li>
+                    <li><a href="#">List your service</a></li>
+                    <li><a href="#">For businesses</a></li>
+                    <li><a href="#">Business support</a></li>
+                </ul>
+            </div>
+        </section>
+    </footer>
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_dashboard.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo">
+        <h1>Welcome to our Bhavan</h1>
+        <div class="avatar-container">
+            {% if profile and profile.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="avatar">
+            {% else %}
+                <!-- Placeholder avatar or default image -->
+                <img src="{{ url_for('static', filename='camera.png') }}" alt="Avatar" class="avatar">
+            {% endif %}
+            <div class="dropdown-content">
+                <a href="{{ url_for('myprofile') }}">View Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+                <a href="{{ url_for('landing') }}">Landing</a>
+            </div>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('chat') }}">Chats</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a href="{{ url_for('edit_profile') }}">Edit_profile</a></li>
+        </ul>
+    </nav>
+    <main>
+        <!-- Profile section will be loaded here -->
+    </main>
+</body>
+</html>

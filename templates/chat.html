@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+<body>
+    <h1>Chat</h1>
+    <form id="messageForm">
+        <input type="text" id="username" placeholder="Enter your username">
+        <input type="text" id="messageInput" placeholder="Type your message here...">
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        document.getElementById('messageForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var username = document.getElementById('username').value;
+            var message = document.getElementById('messageInput').value;
+
+            // Send message to server
+            fetch('/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, message: message })
+            }).then(response => {
+                // Clear input field after sending message
+                document.getElementById('messageInput').value = '';
+            }).catch(error => console.error('Error sending message:', error));
+        });
+    </script>
+</body>
+</html>
+    

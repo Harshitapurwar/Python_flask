@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_worker.css') }}">
+</head>
+<body>
+   
+            <header>
+                <div class="logo">
+                    <img src="logo.png" alt="House Help Logo">
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Find services</a></li>
+                        <li><a href="#">Assistance</a></li>
+                        <li><a href="#" class="login-btn">Log in</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="container">
+                <div class="left-panel">
+                    <div class="welcome-message">
+                        <img src="{{ url_for('static', filename='rocket.jpg') }}" alt="Rocket Icon">
+                        <h1>Welcome</h1>
+                        <p>You are 30 seconds away from earning your own money!</p>
+                        {% if session.logged_in %}
+                            <button onclick="window.location.href='logout.html'">Logout</button>
+                        {% else %}
+                            <button onclick="window.location.href='login.html'">Login</button>
+                        {% endif %}
+                    </div>
+                </div>
+        <div class="right-panel">
+            <div class="toggle-buttons">
+                <button id="user-btn" class="active">Apply as a User</button>
+                <button id="worker-btn">Apply as a Worker</button>
+            </div>
+            <h2 id="form-title">Apply as a User</h2>
+            <div class="profile-form">
+                <h2>{{ profile and 'Edit Profile' or 'Create Profile' }}</h2>
+                <form id="profile-form" action="{{ url_for('profile') }}" method="POST" enctype="multipart/form-data">
+                    <!-- <input type="hidden" id="form-type" name="form_type" value="user">
+                    
+                    <label for="fname">First Name:</label>
+                    <input type="text" id="fname" name="fname" required>
+        
+                    <label for="lname">Last Name:</label>
+                    <input type="text" id="lname" name="lname" required>
+        
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" required>
+        
+                    <label for="street">Street:</label>
+                    <input type="text" id="street" name="street" required>
+        
+                    <label for="city">City:</label>
+                    <input type="text" id="city" name="city" required>
+        
+                    <label for="postal_code">Postal Code:</label>
+                    <input type="text" id="postal_code" name="postal_code" required>
+        
+                    <label for="state">State:</label>
+                    <input type="text" id="state" name="state" required>
+        
+                    <label for="country">Country:</label>
+                    <input type="text" id="country" name="country" required> -->
+                    <label for="fname">First Name:</label>
+            <input type="text" id="fname" name="fname" value="{{ profile.fname if profile else '' }}" required>
+
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" name="lname" value="{{ profile.lname if profile else '' }}" required>
+
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" value="{{ profile.phone if profile else '' }}" required>
+
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" value="{{ profile.street if profile else '' }}" required>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" value="{{ profile.city if profile else '' }}" required>
+
+            <label for="postal_code">Postal Code:</label>
+            <input type="text" id="postal_code" name="postal_code" value="{{ profile.postal_code if profile else '' }}" required>
+
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" value="{{ profile.state if profile else '' }}" required>
+
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" value="{{ profile.country if profile else '' }}" required>
+                    <label for="avatar">Avatar:</label>
+                    <input type="file" id="avatar" name="avatar">
+                    {% if profile and profile.avatar %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="profile-avatar">
+                    {% endif %}
+
+                    <!-- Service Type - Only show when applying as a Worker -->
+                    <div id="service-type-container" style="display: none;">
+                        <label for="service_type">Service Type:</label>
+                        <select name="service_type" id="service_type">
+                            <option value="furniture">Furniture</option>
+                            <option value="plumbing">Plumbing</option>
+                            <option value="carpenters">Carpenters</option>
+                            <option value="electrician">Electrician</option>
+                            <option value="house_cleaner">House Cleaner</option>
+                            <option value="housemaid">Housemaid</option>
+                        </select><br>
+                    </div>
+        
+                    <button type="submit">Submit</button>
+                    <!-- <button type="submit">{{ profile and 'Update Profile' or 'Create Profile' }}</button> -->
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const userBtn = document.getElementById('user-btn');
+        const workerBtn = document.getElementById('worker-btn');
+        const formTitle = document.getElementById('form-title');
+        const serviceTypeContainer = document.getElementById('service-type-container');
+        const formTypeInput = document.getElementById('form-type');
+        const profileForm = document.getElementById('profile-form');
+
+        userBtn.addEventListener('click', () => {
+            userBtn.classList.add('active');
+            workerBtn.classList.remove('active');
+            formTitle.textContent = 'Apply as a User';
+            serviceTypeContainer.style.display = 'none';
+            formTypeInput.value = 'user';
+            profileForm.action = "{{ url_for('profile') }}";
+        });
+
+        workerBtn.addEventListener('click', () => {
+            workerBtn.classList.add('active');
+            userBtn.classList.remove('active');
+            formTitle.textContent = 'Apply as a Worker';
+            serviceTypeContainer.style.display = 'block';
+            formTypeInput.value = 'worker';
+            profileForm.action = "{{ url_for('worker_registration') }}";
+        });
+    </script>
+</body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_worker.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="House Help Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Find services</a></li>
+                <li><a href="#">Assistance</a></li>
+                <li><a href="#" class="login-btn">Log in</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        
+        <div class="left-panel">
+            <div class="welcome-message">
+                <img src="{{ url_for('static', filename='rocket.jpg') }}" alt="Rocket Icon">
+                <h1>Welcome</h1>
+                <p>You are 30 seconds away from earning your own money!</p>
+                <button onclick="window.location.href='login.html'">Login</button>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="toggle-buttons">
+                <button id="employee-btn" class="active">User</button>
+                <button id="hirer-btn">Worker</button>
+            </div>
+            <h2 id="form-title">Apply as a User</h2>
+            <div class="profile-form">
+                <form action="{{ url_for('profile') }}" method="POST" enctype="multipart/form-data">
+                    <label for="fname">First Name:</label>
+                    <input type="text" id="fname" name="fname" value="{{ profile.fname if profile else '' }}" required>
+        
+                    <label for="lname">Last Name:</label>
+                    <input type="text" id="lname" name="lname" value="{{ profile.lname if profile else '' }}" required>
+        
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" value="{{ profile.phone if profile else '' }}" required>
+        
+                    <label for="street">Street:</label>
+                    <input type="text" id="street" name="street" value="{{ profile.street if profile else '' }}" required>
+        
+                    <label for="city">City:</label>
+                    <input type="text" id="city" name="city" value="{{ profile.city if profile else '' }}" required>
+        
+                    <label for="postal_code">Postal Code:</label>
+                    <input type="text" id="postal_code" name="postal_code" value="{{ profile.postal_code if profile else '' }}" required>
+        
+                    <label for="state">State:</label>
+                    <input type="text" id="state" name="state" value="{{ profile.state if profile else '' }}" required>
+        
+                    <label for="country">Country:</label>
+                    <input type="text" id="country" name="country" value="{{ profile.country if profile else '' }}" required>
+        
+                    <label for="avatar">Avatar:</label>
+                    <input type="file" id="avatar" name="avatar">
+                    {% if profile and profile.avatar %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="profile-avatar">
+                    {% endif %}
+        
+                    <button type="submit">{{ profile and 'Update Profile' or 'Create Profile' }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const employeeBtn = document.getElementById('employee-btn');
+        const hirerBtn = document.getElementById('hirer-btn');
+        const formTitle = document.getElementById('form-title');
+
+        employeeBtn.addEventListener('click', () => {
+            employeeBtn.classList.add('active');
+            hirerBtn.classList.remove('active');
+            formTitle.textContent = 'Apply as a User';
+        });
+
+        hirerBtn.addEventListener('click', () => {
+            hirerBtn.classList.add('active');
+            employeeBtn.classList.remove('active');
+            formTitle.textContent = 'Apply as a Worker';
+        });
+    </script>
+</body>
+</html> -->

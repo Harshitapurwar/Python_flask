@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Worker Portal{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Worker Portal</h1>
+</header>
+<main>
+    {% if workers %}
+        {% for worker in workers %}
+            <div class="worker-card">
+                <img src="{{ url_for('static', filename='uploads/' ~ worker.avatar) }}" alt="Avatar" class="worker-avatar">
+                <div class="worker-details">
+                    <h2>{{ worker.fname }} {{ worker.lname }}</h2>
+                    <p><strong>Phone:</strong> {{ worker.phone }}</p>
+                    <p><strong>Street:</strong> {{ worker.street }}</p>
+                    <p><strong>City:</strong> {{ worker.city }}</p>
+                    <p><strong>Postal Code:</strong> {{ worker.postal_code }}</p>
+                    <p><strong>State:</strong> {{ worker.state }}</p>
+                    <p><strong>Country:</strong> {{ worker.country }}</p>
+                    <p><strong>Service Type:</strong> {{ worker.service_type }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No workers found for your postal code.</p>
+    {% endif %}
+</main>
+{% endblock %}

@@ -1,0 +1,207 @@
+/* styles.css
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #f0f2f0, #000c40);
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    text-align: center;
+    color: #333;
+}
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+input[type="text"], input[type="file"], input[type="tel"], select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+.avatar-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.avatar-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.avatar-container img.avatar {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.camera-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #007bff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.camera-icon img {
+    width: 20px;
+    height: auto;
+    filter: invert(1);
+}
+
+.profile-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.profile-form input,
+.profile-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.profile-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-form button:hover {
+    background-color: #0056b3;
+} */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f8f9fa;
+}
+
+.container {
+    max-width: 400px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* width: 900px;
+    height: 500px;
+    display: flex;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden; */
+}
+
+.left-panel, .right-panel {
+    width: 50%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.left-panel {
+    background: #3BB77E;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.left-panel .logo {
+    width: 50px; /* Adjust as needed */
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
+}
+
+.left-panel h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.right-panel {
+    background: white;
+    color: #333;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: #3BB77E;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+form button:hover {
+    background: #369b66;
+}

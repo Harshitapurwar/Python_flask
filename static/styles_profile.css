@@ -1,0 +1,194 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Header Styling */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo img {
+    height: 40px;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 15px;
+}
+
+header nav ul li a:hover {
+    background-color: #575757;
+    border-radius: 5px;
+}
+
+header .avatar-container {
+    position: relative;
+    display: inline-block;
+}
+
+header .avatar-container .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+header .avatar-container .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+header .avatar-container .dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+header .avatar-container .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+header .avatar-container:hover .dropdown-content {
+    display: block;
+}
+
+/* Container Styling */
+.container {
+    display: flex;
+    height: calc(100vh - 60px); /* Adjusted to account for the header height */
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+    margin-bottom: 5rem;
+}
+
+.left-panel, .right-panel {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    margin-bottom: 2rem;
+}
+
+.left-panel {
+    background-color: #3BB77E;
+    border-right: 1px solid #ddd;
+}
+
+.left-panel .logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.left-panel h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Right Panel Form Styling */
+.right-panel form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.right-panel label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.right-panel input {
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.right-panel .avatar-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.right-panel .avatar-wrapper {
+    position: relative;
+}
+
+.right-panel .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.right-panel .avatar-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.right-panel .avatar-icon img {
+    width: 20px;
+    height: 20px;
+    color: white;
+}
+
+.right-panel .avatar-upload {
+    display: none;
+}
+
+.right-panel button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.right-panel button:hover {
+    background-color: #555;
+}

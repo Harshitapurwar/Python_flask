@@ -1,0 +1,138 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f8f9fa;
+}
+
+.container {
+    width: 900px;
+    height: 500px;
+    display: flex;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.left-panel, .right-panel {
+    width: 50%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.left-panel {
+    background: #3BB77E;
+    color: white;
+    text-align: center;
+}
+
+.left-panel header {
+    position: absolute; /* Add this line */
+    top: 10px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
+}
+
+.left-panel .logo{
+    width: 50px; /* Adjust as needed */
+}
+
+.left-panel h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.left-panel p {
+    margin-bottom: 40px;
+    font-size: 14px;
+}
+
+.left-panel .button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: white;
+    color: #3BB77E;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.left-panel .button:hover {
+    background: #f1f1f1;
+}
+
+.right-panel {
+    background: white;
+    color: #333;
+    text-align: center;
+}
+
+
+
+.right-panel h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.social-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.social-container a {
+    margin: 0 10px;
+}
+
+.social-container img {
+    width: 30px;
+    height: 30px;
+}
+
+.right-panel span {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: #3BB77E;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+form button:hover {
+    background: #369b66;
+}
+
+.right-panel p {
+    margin-top: 20px;
+    font-size: 14px;
+}
