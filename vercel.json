@@ -1,0 +1,15 @@
+{
+    "version": 2,
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "app.py"
+      }
+    ],
+    "functions": {
+      "app.py": {
+        "runtime": "python3.9"
+      }
+    }
+  }
+  
