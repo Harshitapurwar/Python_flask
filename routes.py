@@ -178,27 +178,13 @@ def worker_registration():
             db.session.rollback()
             logging.error(f"Error saving worker profile: {e}")
             flash('Error saving worker profile', 'danger')
-            return redirect(url_for('worker_registration'))
+            return redirect(url_for('worker_registration.html'))
         
         # Retrieve all workers from the database
     # workers = WorkerProfile.query.all()
 
     # return render_template('worker_registration.html')
 
-@app.route('/worker_card/<service_type>', methods=['GET', 'POST'])
-def worker_card(service_type):
-    if request.method == 'POST':
-        user_postal_code = request.form.get('postal_code')
-        session['user_postal_code'] = user_postal_code
-    else:
-        user_postal_code = session.get('user_postal_code')
-
-    if user_postal_code:
-        workers = WorkerProfile.query.filter_by(postal_code=user_postal_code, service_type=service_type).all()
-    else:
-        workers = WorkerProfile.query.filter_by(service_type=service_type).all()
-
-    return render_template('worker_card.html', service_type=service_type, workers=workers, user_postal_code=user_postal_code)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -228,7 +214,7 @@ def signup():
 def login():
     if current_user.is_authenticated:
         print("User is already authenticated, redirecting to dashboard")
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('index'))
 
     if request.method == 'POST':
         email = request.form['email']
@@ -242,8 +228,8 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user, remember=request.form.get('remember_me'))
             next_page = request.args.get('next')
-            print(f"Redirecting to: {next_page or 'dashboard'}")  
-            return redirect(next_page or url_for('dashboard'))
+            print(f"Redirecting to: {next_page or 'next'}")  
+            return redirect(next_page or url_for('index'))
         else:
             flash('Login unsuccessful. Please check email and password.', 'danger')
     
@@ -484,9 +470,9 @@ def myprofile():
 
     return render_template('myprofile.html', profile=profile)
 
-@app.route('/chat')
-def chat():
-    return render_template('chat.html')
+
+
+
 
 @app.route('/send_message', methods=['POST'])
 def send_message():
@@ -499,23 +485,61 @@ def send_message():
     else:
         return jsonify({'success': False, 'error': 'Invalid username or message'}), 400
 
+@app.route('/services')
+@login_required
+def services():
+    return render_template('services.html')
+
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')
 @app.route('/chats')
 def chats():
     return render_template('chats.html')
 
+@app.route('/footer')
+def footer():
+    return render_template('footer.html')
+
+
 # @app.route('/index')
+# @login_required
 # def index():
 
 #     session['logged_in'] = False  
 #     profile = None  
-#     return render_template('index.html', profile=profile)
+#     return render_template('landing.html',  user=current_user)
 # @app.route('/index')
 # def index():
 #     return render_template('index.html')
 @app.route('/index')
-@login_required
 def index():
-    return render_template('index.html', user=current_user)
+    return render_template('index.html')   
+
+
+
+@app.route('/worker_card/<service_type>', methods=['GET', 'POST'])
+def worker_card(service_type):
+    if request.method == 'POST':
+        user_postal_code = request.form.get('postal_code')
+        print(f"Postal code from POST form: {user_postal_code}")  # Debugging
+        if user_postal_code:
+            session['user_postal_code'] = user_postal_code
+    else:
+        user_postal_code = session.get('user_postal_code')
+        print(f"Postal code from session: {user_postal_code}")
+
+    if user_postal_code:
+        workers = WorkerProfile.query.filter_by(postal_code=user_postal_code, service_type=service_type).all()
+        print(f"Filtered workers: {workers}")  # Debugging
+    else:
+        workers = []
+        print("No postal code provided, no workers to show.")
+
+    return render_template('worker_card.html', service_type=service_type, workers=workers, user_postal_code=user_postal_code)
+
+
+
 
 @app.route('/landing')
 def landing():

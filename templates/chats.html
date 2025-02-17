@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,9 +8,116 @@
 <body>
     <h1>Chat History</h1>
     <div id="chatHistory">
-        <!-- Chat messages will be displayed here -->
+       
     </div>
 
+    <script>
+        
+        fetch('/get_chat_messages')
+            .then(response => response.json())
+            .then(data => {
+                var chatHistory = document.getElementById('chatHistory');
+                data.forEach(message => {
+                    var messageDiv = document.createElement('div');
+                    messageDiv.textContent = message.username + ': ' + message.message;
+                    chatHistory.appendChild(messageDiv);
+                });
+            })
+            .catch(error => console.error('Error fetching chat messages:', error));
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+
+        .chat-container {
+            flex-grow: 1; /* Allows chat container to grow and push the footer down */
+            max-width: 800px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 80vh;
+            margin: 20px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f1f1f1;
+        }
+
+        .chat-message:nth-child(odd) {
+            background-color: #e0f7fa;
+        }
+
+        .chat-message .username {
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 5px;
+        }
+
+        .chat-message .message {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .chat-message .timestamp {
+            font-size: 12px;
+            color: #999;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="chat-container">
+        <h1>Chat History</h1>
+        <div id="chatHistory">
+            <!-- Chat messages will be displayed here -->
+        </div>
+    </div>
+    {% include 'footer.html' %}
     <script>
         // Fetch chat messages from server and display them
         fetch('/get_chat_messages')
@@ -19,7 +126,24 @@
                 var chatHistory = document.getElementById('chatHistory');
                 data.forEach(message => {
                     var messageDiv = document.createElement('div');
-                    messageDiv.textContent = message.username + ': ' + message.message;
+                    messageDiv.classList.add('chat-message');
+
+                    var usernameDiv = document.createElement('div');
+                    usernameDiv.classList.add('username');
+                    usernameDiv.textContent = message.username;
+
+                    var messageContentDiv = document.createElement('div');
+                    messageContentDiv.classList.add('message');
+                    messageContentDiv.textContent = message.message;
+
+                    var timestampDiv = document.createElement('div');
+                    timestampDiv.classList.add('timestamp');
+                    timestampDiv.textContent = message.timestamp;
+
+                    messageDiv.appendChild(usernameDiv);
+                    messageDiv.appendChild(messageContentDiv);
+                    messageDiv.appendChild(timestampDiv);
+
                     chatHistory.appendChild(messageDiv);
                 });
             })

@@ -3,9 +3,12 @@
 {% block title %}Worker Portal{% endblock %}
 
 {% block content %}
-<header>
+<link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles_worker.css') }}">
+{% include 'header.html' %}
+<!-- <header> -->
     <h1>Worker Portal</h1>
-</header>
+<!-- </header> -->
 <main>
     {% if workers %}
         {% for worker in workers %}
@@ -28,3 +31,4 @@
     {% endif %}
 </main>
 {% endblock %}
+{% include 'footer.html' %}

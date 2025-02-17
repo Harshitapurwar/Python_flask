@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,11 +27,140 @@
                 },
                 body: JSON.stringify({ username: username, message: message })
             }).then(response => {
-                // Clear input field after sending message
                 document.getElementById('messageInput').value = '';
             }).catch(error => console.error('Error sending message:', error));
         });
     </script>
 </body>
 </html>
-    
+     -->
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Chat</title>
+         <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+         <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+         <style>
+             * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+     
+             .chat-container {
+                flex-grow: 1; /* Allows chat container to grow and push the footer down */
+            max-width: 800px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 80vh;
+            margin: 20px auto;
+             }
+     
+             h1 {
+                 text-align: center;
+                 color: #333;
+             }
+     
+             #messageForm {
+                 display: flex;
+                 flex-direction: column;
+                 gap: 10px;
+             }
+     
+             #username, #messageInput {
+                 padding: 10px;
+                 border: 1px solid #ddd;
+                 border-radius: 4px;
+                 font-size: 16px;
+             }
+     
+             #messageInput {
+                 flex-grow: 1;
+             }
+     
+             button {
+                 padding: 10px;
+                 background-color: #4CAF50;
+                 color: #fff;
+                 border: none;
+                 border-radius: 4px;
+                 cursor: pointer;
+                 font-size: 16px;
+             }
+     
+             button:hover {
+                 background-color: #45a049;
+             }
+     
+             .chat-history-btn {
+                 margin-top: 20px;
+                 background-color: #2196F3;
+             }
+     
+             .chat-history-btn:hover {
+                 background-color: #1e87e5;
+             }
+     
+             .options-container {
+                 display: flex;
+                 justify-content: space-between;
+                 align-items: center;
+                 margin-top: 20px;
+             }
+         </style>
+     </head>
+     <body>
+        {% include 'header.html' %}
+         <div class="chat-container">
+             <h1>Chat</h1>
+             <form id="messageForm">
+                 <input type="text" id="username" placeholder="Enter your username">
+                 <input type="text" id="messageInput" placeholder="Type your message here...">
+                 <button type="submit">Send</button>
+             </form>
+             <div class="options-container">
+                <button class="chat-history-btn" onclick="window.location.href='/chats';">View Chat History</button>
+
+             </div>
+         </div>
+         {% include 'footer.html' %}
+         <script>
+             document.getElementById('messageForm').addEventListener('submit', function(event) {
+                 event.preventDefault();
+                 var username = document.getElementById('username').value;
+                 var message = document.getElementById('messageInput').value;
+     
+                 // Send message to server
+                 fetch('/send_message', {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json'
+                     },
+                     body: JSON.stringify({ username: username, message: message })
+                 }).then(response => {
+                     // Clear input field after sending message
+                     document.getElementById('messageInput').value = '';
+                 }).catch(error => console.error('Error sending message:', error));
+             });
+         </script>
+     </body>
+     </html>
+     

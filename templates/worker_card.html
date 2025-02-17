@@ -6,6 +6,8 @@
     <title>{{ service_type|capitalize }} Workers</title>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+         <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
     <style>
        body {
     font-family: Arial, sans-serif;
@@ -14,36 +16,6 @@
     box-sizing: border-box;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #ddd;
-}
-
-header .logo img {
-    width: 100px;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #333;
-}
-
-nav .login-btn {
-    background-color: #3BB77E;
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: white;
-}
 
 .content {
     margin: 20px;
@@ -159,24 +131,134 @@ nav .login-btn {
 .contact-links .whatsapp:hover {
     background-color: #1ebc58;
 }
+/* Postal code form container */
+.postal-code-form {
+    background-color: #3BB77E; /* Background color as specified */
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.8s ease-in-out;
+}
+
+/* Fade-in animation for the form */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Styling the input field */
+.postal-code-form input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #2e855d; /* Darker shade of green */
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+    background-color: #fff;
+    color: #333;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Input field hover and focus effect */
+.postal-code-form input[type="text"]:hover,
+.postal-code-form input[type="text"]:focus {
+    border-color: #fff;
+    background-color: #2e855d;
+    color: #fff;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Styling the button */
+.postal-code-form button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #3BB77E;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    letter-spacing: 1px;
+}
+
+/* Button hover effect */
+.postal-code-form button:hover {
+    background-color: #2e855d;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Button active effect */
+.postal-code-form button:active {
+    transform: translateY(1px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+/* Return Button styling */
+.return-btn {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.return-btn .button {
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: #3BB77E; /* Matching with your theme */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover and active effects */
+.return-btn .button:hover {
+    background-color: #2e855d; /* Darker shade on hover */
+    transform: translateY(-3px); /* Slight lift effect */
+}
+
+.return-btn .button:active {
+    transform: translateY(1px);
+}
+
 
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="logo.png" alt="House Help Logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">Find services</a></li>
-                <li><a href="#">Assistance</a></li>
-                <li><a href="#" class="login-btn">Log in</a></li>
-            </ul>
-        </nav>
-    </header>
+    {% include 'header.html' %}
+    <div class="postal-code-form">
+        <form method="POST" action="/worker_card/{{ service_type }}">
+            <input type="text" name="postal_code" placeholder="Enter Postal Code" required>
+            <button type="submit">Filter Workers</button>
+        </form>
     
+        {% if not workers %}
+        <p>No Workers found in your region. Try searching with a different postal code.</p>
+        {% endif %}
+    
+        <!-- Return to Landing Page Button -->
+        <div class="return-btn">
+            <a href="{{ url_for('landing') }}" class="button">Return to Landing Page</a>
+        </div>
+    </div>
     <div class="content">
+         <!-- Check if there are workers and display them, otherwise show a message -->
+         {% if workers %}
         {% for worker in workers %}
         <div class="worker-card">
             {% if worker.avatar %}
@@ -204,7 +286,11 @@ nav .login-btn {
             </div>
         </div>
         {% endfor %}
+        {% else %}
+            <p>Enter the postal code you want to search 🔝.</p>
+        {% endif %}
     </div>
+    {% include 'footer.html' %}
     <script>
         function redirectToChats() {
             window.location.href = '/chats';

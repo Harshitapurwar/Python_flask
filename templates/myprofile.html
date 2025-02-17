@@ -1,101 +1,135 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_worker.css') }}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        header {
-            background-color: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid #dee2e6;
+        html, body {
+            height: 100%;
         }
 
-        header img {
-            max-width: 50px;
-            height: auto;
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f9f9f9;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
         }
 
         h1 {
-            margin: 0;
-            font-size: 24px;
+            font-size: 26px;
+            color: #343a40;
+            text-align: center;
+            margin: 30px 0;
         }
 
         .profile-container {
             display: flex;
-            align-items: flex-start;
-            padding: 20px;
-            max-width: 800px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 30px;
+            max-width: 900px;
             margin: 20px auto;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            background-color: #ffffff;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .avatar {
-            border-radius: 50%;
-            margin-right: 20px;
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border: 2px solid #dee2e6;
-        }
+        .Avatar {
+    border-radius: 50%;
+    width: 300px;  /* Increased size */
+    height: 300px; /* Increased size */
+    object-fit: cover;
+    border: 3px solid #3BB77E;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-right: 30px;
+}
+
 
         .profile-details {
             max-width: 600px;
+            flex-grow: 1;
         }
 
         .profile-details h2 {
-            margin-top: 0;
-            font-size: 20px;
-            color: #343a40;
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #3BB77E;
         }
 
         .profile-details p {
-            margin: 5px 0;
-            color: #495057;
+            margin: 10px 0;
+            font-size: 16px;
+            line-height: 1.6;
         }
 
-        .profile-details strong {
-            color: #212529;
+        .profile-details p strong {
+            color: #555;
+            margin-right: 10px;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .avatar {
+                margin: 0 0 20px 0;
+            }
+
+            .profile-details {
+                max-width: 100%;
+            }
+
+            .profile-details h2 {
+                margin-top: 0;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo">
-        <h1>My Profile</h1>
-    </header>
-    <main>
-        <div class="profile-container">
-            {% if profile and profile.avatar %}
-                <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="avatar">
+    {% include 'header.html' %}
+
+    <h1>My Profile</h1>
+    <div class="profile-container">
+        {% if profile and profile.avatar %}
+            <img src="{{ url_for('static', filename='uploads/' ~ profile.avatar) }}" alt="Avatar" class="Avatar">
+        {% else %}
+            <img src="{{ url_for('static', filename='camera.png') }}" alt="Avatar" class="Avatar">
+        {% endif %}
+        <div class="profile-details">
+            <h2>Profile Information</h2>
+            {% if profile %}
+                <p><strong>First Name:</strong> {{ profile.fname }}</p>
+                <p><strong>Last Name:</strong> {{ profile.lname }}</p>
+                <p><strong>Phone:</strong> {{ profile.phone }}</p>
+                <p><strong>Street:</strong> {{ profile.street }}</p>
+                <p><strong>City:</strong> {{ profile.city }}</p>
+                <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
+                <p><strong>State:</strong> {{ profile.state }}</p>
+                <p><strong>Country:</strong> {{ profile.country }}</p>
             {% else %}
-                <img src="{{ url_for('static', filename='camera.png') }}" alt="Avatar" class="avatar">
+                <p>No profile information available.</p>
             {% endif %}
-            <div class="profile-details">
-                <h2>Profile Information</h2>
-                {% if profile %}
-                    <p><strong>First Name:</strong> {{ profile.fname }}</p>
-                    <p><strong>Last Name:</strong> {{ profile.lname }}</p>
-                    <p><strong>Phone:</strong> {{ profile.phone }}</p>
-                    <p><strong>Street:</strong> {{ profile.street }}</p>
-                    <p><strong>City:</strong> {{ profile.city }}</p>
-                    <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
-                    <p><strong>State:</strong> {{ profile.state }}</p>
-                    <p><strong>Country:</strong> {{ profile.country }}</p>
-                {% else %}
-                    <p>No profile information available.</p>
-                {% endif %}
-            </div>
         </div>
-    </main>
+    </div>
+
+    {% include 'footer.html' %}
 </body>
 </html>

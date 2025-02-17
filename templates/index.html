@@ -5,20 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Worker Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_worker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
 </head>
 <body>
-    <header>
+    <!-- <header>
         <div class="logo">
-            <img src="logo.png" alt="House Help Logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="House Help Logo">
         </div>
         <nav>
             <ul>
-                <li><a href="#">Find services</a></li>
-                <li><a href="#">Assistance</a></li>
-                <li><a href="#" class="login-btn">Log in</a></li>
+                <li><a href="{{ url_for('services') }}">Find services</a></li>
+                <li><a href="{{ url_for('chat') }}">Assistance</a></li>
+                <li><a href="{{ url_for('login') }}" class="login-btn">Log in</a></li>
             </ul>
         </nav>
-    </header>
+    </header> -->
+    {% include 'header.html' %}
     <div class="container">
         <div class="left-panel">
             <div class="welcome-message">
@@ -118,6 +121,7 @@
             </div>
         </div>
     </div>
+    {% include 'footer.html' %}
     <script>
         const userBtn = document.getElementById('user-btn');
         const workerBtn = document.getElementById('worker-btn');
