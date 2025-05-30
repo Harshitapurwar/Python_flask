@@ -20,7 +20,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 # Import the routes after the app and db are initialized
-
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db.session.remove()
+    
 from routes import *
 if __name__ == '__main__':
     app.run(debug=True)
