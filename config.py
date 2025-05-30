@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24).hex())
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:harshita1234@localhost:5432/test'
+SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
