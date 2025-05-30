@@ -19,6 +19,7 @@ Flask-SQLAlchemy==3.1.1
 python-dotenv
 Flask-WTF
 WTForms
+flask-migrate
 email-validator
 greenlet==3.1.1
 gunicorn==23.0.0
