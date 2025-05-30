@@ -202,48 +202,58 @@ def worker_registration():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
 
+        if not name or not email or not password:
+            flash('All fields are required.', 'warning')
+            return render_template('signup.html')
+
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         new_user = User(name=name, email=email, password=hashed_password)
 
         try:
             db.session.add(new_user)
             db.session.commit()
-            login_user(new_user) 
-            flash('User successfully registered', 'success')
-            session['user_id'] = new_user.id  
-            return redirect(url_for('index')) 
+
+            login_user(new_user)
+            session['user_id'] = new_user.id
+            flash('User successfully registered!', 'success')
+            return redirect(url_for('index'))
+        
         except Exception as e:
-            db.session.rollback()  
-            logging.error(f"Error creating user: {e}")
-            flash('User already exists or other error', 'danger')
+            db.session.rollback()
+            logging.exception("Error occurred during signup:")
+            flash('User already exists or there was a database error.', 'danger')
+        
+        finally:
+            db.session.close()
 
     return render_template('signup.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        print("User is already authenticated, redirecting to landing")
         return redirect(url_for('landing'))
 
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        
-        print(f"Email: {email}, Password: {password}")
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        if not email or not password:
+            flash('Please enter both email and password.', 'warning')
+            return render_template('login.html')
 
         user = User.query.filter_by(email=email).first()
-        if user:
-            print("User found")
 
         if user and check_password_hash(user.password, password):
-            login_user(user, remember=request.form.get('remember_me'))
+            login_user(user, remember=bool(request.form.get('remember_me')))
             flash('Logged in successfully!', 'success')
-            return redirect(url_for('landing'))  # ✅ Go to landing after login
+            return redirect(url_for('landing'))
         else:
-            flash('Login unsuccessful. Please check email and password.', 'danger')
+            flash('Invalid email or password.', 'danger')
 
     return render_template('login.html')
 
