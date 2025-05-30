@@ -8,15 +8,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 from flask_socketio import SocketIO, join_room, leave_room, send,emit
 from flask_dance.contrib.google import make_google_blueprint, google
-from flask_dance.contrib.linkedin import make_linkedin_blueprint, linkedin
 from flask_dance.contrib.github import make_github_blueprint, github
+from flask_dance.contrib.linkedin import make_linkedin_blueprint, linkedin
+from flask_sqlalchemy import SQLAlchemy
 from config import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
 # from config import Config
 from flask_mail import Mail, Message
 from forms import RequestResetForm, ResetPasswordForm
 # from email import send_reset_email
 from forms import RequestResetForm,ResetPasswordForm
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import login_user, current_user, logout_user, login_required,current_user, UserMixin
 from app import app, db, mail, login_manager,bcrypt
 
 
@@ -35,17 +36,60 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 socketio = SocketIO(app)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # for localhost only
+
+# db = SQLAlchemy(app)
+
+# Login
+# login_manager = LoginManager(app)
+# login_manager.login_view = 'login'
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# class User(db.Model, UserMixin):
+#     id = db.Column(db.Integer, primary_key=True)
+#     email = db.Column(db.String(256), unique=True)
+#     provider = db.Column(db.String(50))
 
-google_bp = make_google_blueprint(client_id=GOOGLE_CLIENT_ID, client_secret=GOOGLE_CLIENT_SECRET, redirect_to='google_authorized')
-linkedin_bp = make_linkedin_blueprint(client_id=LINKEDIN_CLIENT_ID, client_secret=LINKEDIN_CLIENT_SECRET, redirect_to='linkedin_authorized')
-github_bp = make_github_blueprint(client_id=GITHUB_CLIENT_ID, client_secret=GITHUB_CLIENT_SECRET, redirect_to='github_authorized')
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
-app.register_blueprint(google_bp, url_prefix='/google_login')
-app.register_blueprint(linkedin_bp, url_prefix='/linkedin_login')
-app.register_blueprint(github_bp, url_prefix='/github_login')
+# Google OAuth
+google_bp = make_google_blueprint(
+    client_id='GOOGLE_CLIENT_ID',
+    client_secret='GOOGLE_CLIENT_SECRET',
+    scope=['profile', 'email'],
+    redirect_to='google_login'
+)
+app.register_blueprint(google_bp, url_prefix="/login")
+
+# GitHub OAuth
+github_bp = make_github_blueprint(
+    client_id='GITHUB_CLIENT_ID',
+    client_secret='GITHUB_CLIENT_SECRET',
+    redirect_to='github_login'
+)
+app.register_blueprint(github_bp, url_prefix="/login")
+
+# LinkedIn OAuth
+linkedin_bp = make_linkedin_blueprint(
+    client_id='LINKEDIN_CLIENT_ID',
+    client_secret='LINKEDIN_CLIENT_SECRET',
+    redirect_to='linkedin_login',
+    scope=["r_liteprofile", "r_emailaddress"]
+)
+app.register_blueprint(linkedin_bp, url_prefix="/login")
+
+# google_bp = make_google_blueprint(client_id=GOOGLE_CLIENT_ID, client_secret=GOOGLE_CLIENT_SECRET, redirect_to='google_authorized')
+# linkedin_bp = make_linkedin_blueprint(client_id=LINKEDIN_CLIENT_ID, client_secret=LINKEDIN_CLIENT_SECRET, redirect_to='linkedin_authorized')
+# github_bp = make_github_blueprint(client_id=GITHUB_CLIENT_ID, client_secret=GITHUB_CLIENT_SECRET, redirect_to='github_authorized')
+
+# app.register_blueprint(google_bp, url_prefix='/google_login')
+# app.register_blueprint(linkedin_bp, url_prefix='/linkedin_login')
+# app.register_blueprint(github_bp, url_prefix='/github_login')
 
 @app.route('/')
 def home():
@@ -111,31 +155,6 @@ def reset_token(token):
     
     return render_template('reset_token.html', title='Reset Password', form=form)
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('dashboard'))
-
-#     if request.method == 'POST':
-#         email = request.form['email']
-#         password = request.form['password']
-        
-#         user = User.query.filter_by(email=email).first()
-#         if user and check_password_hash(user.password, password):
-#             login_user(user, remember=request.form.get('remember_me'))
-#             next_page = request.args.get('next')
-#             return redirect(next_page or url_for('dashboard'))
-#         else:
-#             flash('Login unsuccessful. Please check email and password.', 'danger')
-    
-#     return render_template('login.html')
-
-# @app.route('/logout', methods=['GET', 'POST'])
-# @login_required
-# def logout():
-#     logout_user()
-#     session.clear() 
-#     return redirect(url_for('login'))
 
 
 @app.route('/worker_registration', methods=['GET', 'POST'])
@@ -179,12 +198,7 @@ def worker_registration():
             logging.error(f"Error saving worker profile: {e}")
             flash('Error saving worker profile', 'danger')
             return redirect(url_for('worker_registration.html'))
-        
-        # Retrieve all workers from the database
-    # workers = WorkerProfile.query.all()
-
-    # return render_template('worker_registration.html')
-
+      
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -200,6 +214,7 @@ def signup():
         try:
             db.session.add(new_user)
             db.session.commit()
+            login_user(new_user) 
             flash('User successfully registered', 'success')
             session['user_id'] = new_user.id  
             return redirect(url_for('index')) 
@@ -209,30 +224,29 @@ def signup():
             flash('User already exists or other error', 'danger')
 
     return render_template('signup.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        print("User is already authenticated, redirecting to dashboard")
-        return redirect(url_for('index'))
+        print("User is already authenticated, redirecting to landing")
+        return redirect(url_for('landing'))
 
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         
-        print(f"Email: {email}, Password: {password}") 
+        print(f"Email: {email}, Password: {password}")
 
         user = User.query.filter_by(email=email).first()
         if user:
-            print("User found") 
+            print("User found")
+
         if user and check_password_hash(user.password, password):
             login_user(user, remember=request.form.get('remember_me'))
-            next_page = request.args.get('next')
-            print(f"Redirecting to: {next_page or 'next'}")  
-            return redirect(next_page or url_for('index'))
+            flash('Logged in successfully!', 'success')
+            return redirect(url_for('landing'))  # ✅ Go to landing after login
         else:
             flash('Login unsuccessful. Please check email and password.', 'danger')
-    
+
     return render_template('login.html')
 
 
@@ -254,74 +268,65 @@ def logout():
         flash('An error occurred during logout. Please try again.', 'danger')
         return redirect(url_for('dashboard'))  
     
-@app.route('/google_authorized')
-def google_authorized():
+
+@app.route("/login/google")
+def google_login():
     if not google.authorized:
-        return redirect(url_for('google.login'))
+        return redirect(url_for("google.login"))
 
-    resp = google.get('/plus/v1/people/me')
-    assert resp.ok, resp.text
-    info = resp.json()
-    name = info['displayName']
-    email = info['emails'][0]['value']
+    resp = google.get("/oauth2/v2/userinfo")
+    if resp.ok:
+        email = resp.json()["email"]
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            user = User(email=email, provider="google")
+            db.session.add(user)
+            db.session.commit()
+        login_user(user)
+        flash("Logged in with Google", "success")
+        return redirect(url_for("dashboard"))
+    flash("Google login failed", "danger")
+    return redirect(url_for("home"))
 
-    # Implementing user signup or login logic
-    user = User.query.filter_by(email=email).first()
-    if user is None:
-        user = User(name=name, email=email)
-        db.session.add(user)
-        db.session.commit()
-
-    login_user(user)
-    return redirect(url_for('profile'))
-
-@app.route('/linkedin_authorized')
-def linkedin_authorized():
-    if not linkedin.authorized:
-        return redirect(url_for('linkedin.login'))
-
-    resp = linkedin.get('v1/people/~:(id,first-name,last-name,email-address)')
-    assert resp.ok, resp.text
-    info = resp.json()
-    name = f"{info['firstName']} {info['lastName']}"
-    email = info['emailAddress']
-
-    return oauth_signup(name, email)
-
-@app.route('/github_authorized')
-def github_authorized():
+@app.route("/login/github")
+def github_login():
     if not github.authorized:
-        return redirect(url_for('github.login'))
+        return redirect(url_for("github.login"))
 
-    resp = github.get('/user')
-    assert resp.ok, resp.text
-    info = resp.json()
-    name = info['name']
-    email = info['email']
+    resp = github.get("/user")
+    if resp.ok:
+        email = resp.json().get("email") or f"{resp.json()['id']}@github.com"
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            user = User(email=email, provider="github")
+            db.session.add(user)
+            db.session.commit()
+        login_user(user)
+        flash("Logged in with GitHub", "success")
+        return redirect(url_for("dashboard"))
+    flash("GitHub login failed", "danger")
+    return redirect(url_for("home"))
 
-    return oauth_signup(name, email)
+@app.route("/login/linkedin")
+def linkedin_login():
+    if not linkedin.authorized:
+        return redirect(url_for("linkedin.login"))
 
+    email_resp = linkedin.get("v2/emailAddress?q=members&projection=(elements*(handle~))")
+    profile_resp = linkedin.get("v2/me")
 
-def oauth_signup(name, email):
-    existing_user = User.query.filter_by(email=email).first()
-    if existing_user:
-        session['user_id'] = existing_user.id  # Store user ID in session
-        return redirect(url_for('dashboard'))
-
-    new_user = User(name=name, email=email, password='')
-    try:
-        db.session.add(new_user)
-        db.session.commit()
-        session['user_id'] = new_user.id  # Store user ID in session
-        return redirect(url_for('dashboard'))
-    except Exception as e:
-        db.session.rollback()
-        logging.error(f"Error creating user: {e}")
-        flash('Error creating user', 'danger')
-        return redirect(url_for('signup'))
-
-
-
+    if email_resp.ok and profile_resp.ok:
+        email = email_resp.json()["elements"][0]["handle~"]["emailAddress"]
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            user = User(email=email, provider="linkedin")
+            db.session.add(user)
+            db.session.commit()
+        login_user(user)
+        flash("Logged in with LinkedIn", "success")
+        return redirect(url_for("dashboard"))
+    flash("LinkedIn login failed", "danger")
+    return redirect(url_for("home"))
 
 
 
@@ -539,16 +544,10 @@ def worker_card(service_type):
     return render_template('worker_card.html', service_type=service_type, workers=workers, user_postal_code=user_postal_code)
 
 
-
-
 @app.route('/landing')
+@login_required
 def landing():
-    user_id = session.get('user_id')
-    if not user_id:
-        flash('User not logged in', 'danger')
-        return redirect(url_for('login'))
-
-    profile = UserProfile.query.filter_by(user_id=user_id).first()
+    profile = UserProfile.query.filter_by(user_id=current_user.id).first()
     if profile and profile.postal_code:
         workers = WorkerProfile.query.filter_by(postal_code=profile.postal_code).all()
     else:
@@ -564,6 +563,8 @@ def landing():
             workers_by_type[service_type].append(worker)
 
     return render_template('landing.html', profile=profile, workers_by_type=workers_by_type)
+
+
 
 @app.route('/get_chat_messages')
 def get_chat_messages():

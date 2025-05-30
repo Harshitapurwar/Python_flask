@@ -18,24 +18,72 @@
             <p>To keep connected with us please login with your personal info</p>
             <a href="{{ url_for('signup') }}" class="button">Sign Up</a>
         </div>
-        <div class="right-panel">
-            
+        <div class="right-panel" style="max-width: 700px; margin: auto;">
             <h2>Login</h2>
-            <!-- <form method="POST"> -->
-                <form method="POST" action="{{ url_for('login') }}">
-                <input type="email" id="email" name="email" placeholder="Email" required>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+            <form method="POST" action="{{ url_for('login') }}">
+                <!-- Email Field -->
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Email" 
+                    required 
+                    style="width: 100%; padding: 10px; margin-bottom: 15px; box-sizing: border-box;"
+                >
+        
+                <!-- Password Field with Eye Toggle -->
+                <div style="position: relative; width: 100%; margin-bottom: 15px;">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Password" 
+                        required 
+                        style="width: 100%; padding: 10px 40px 10px 10px; box-sizing: border-box;"
+                    >
+                    <button 
+                        type="button" 
+                        onclick="toggleLoginPassword()" 
+                        style="
+                            position: absolute;
+                            right: 10px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                            padding: 0;
+                        "
+                        aria-label="Toggle password visibility"
+                    >
+                        <svg id="loginEyeIcon" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="gray">
+                            <path d="M12 4.5C7.305 4.5 3.218 7.342 1.5 12c1.718 4.658 5.805 7.5 10.5 7.5s8.782-2.842 10.5-7.5C20.782 7.342 16.695 4.5 12 4.5zm0 12c-2.485 0-4.5-2.015-4.5-4.5S9.515 7.5 12 7.5s4.5 2.015 4.5 4.5-2.015 4.5-4.5 4.5zm0-7.5a3 3 0 100 6 3 3 0 000-6z"/>
+                        </svg>
+                    </button>
+                </div>
+        
+                <!-- Remember Me -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <div>
                         <input type="checkbox" id="remember_me" name="remember_me">
                         <label for="remember_me">Remember me</label>
                     </div>
                 </div>
-                <button type="submit">Login</button>
+        
+                <!-- Submit -->
+                <button type="submit" style="width: 100%; padding: 12px; background-color: #3BB77E; color: white; border: none; cursor: pointer;">Login</button>
             </form>
-            <p><a href="{{ url_for('reset_request') }}">Forgot Password?</a></p>
+        
+            <p style="margin-top: 10px;"><a href="{{ url_for('reset_request') }}">Forgot Password?</a></p>
             <p>Don't have an account? <a href="{{ url_for('signup') }}">Signup</a></p>
         </div>
     </div>
+    <script>
+        function toggleLoginPassword() {
+            const input = document.getElementById("password");
+            const icon = document.getElementById("loginEyeIcon");
+            input.type = input.type === "password" ? "text" : "password";
+        }
+    </script>
 </body>
 </html>

@@ -15,9 +15,9 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#">Find services</a></li>
-                <li><a href="#">Assistance</a></li>
-                <li><a href="#" class="login-btn">Log in</a></li>
+                <li><a href="{{ url_for('services') }}">Find services</a></li>
+            <li><a href="{{ url_for('chat') }}">Assistance</a></li>
+            <li><a href="{{ url_for('login') }}" class="login-btn">Log in</a></li>
             </ul>
         </nav>
         
