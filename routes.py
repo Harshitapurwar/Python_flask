@@ -12,10 +12,8 @@ from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.contrib.linkedin import make_linkedin_blueprint, linkedin
 from flask_sqlalchemy import SQLAlchemy
 from config import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
-# from config import Config
 from flask_mail import Mail, Message
 from forms import RequestResetForm, ResetPasswordForm
-# from email import send_reset_email
 from forms import RequestResetForm,ResetPasswordForm
 from flask_login import login_user, current_user, logout_user, login_required,current_user, UserMixin
 from app import app, db, mail, login_manager,bcrypt
